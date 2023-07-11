@@ -15,8 +15,8 @@ export const SliderContent: FC<PropsWithChildren> = ({ children }) => {
   }, [children]);
 
   return (
-    <SliderContentWrapper isChanging={isChanging}>
-      {content}
+    <SliderContentWrapper>
+      <SliderContentBody isChanging={isChanging}>{content}</SliderContentBody>
     </SliderContentWrapper>
   );
 };
@@ -44,7 +44,12 @@ const Animate = css`
   }
 `;
 
-const SliderContentWrapper = styled.div<{ isChanging: boolean }>`
+const SliderContentWrapper = styled.div`
+  position: relative;
+  width: 30%;
+`;
+
+const SliderContentBody = styled.div<{ isChanging: boolean }>`
   position: absolute;
   top: 50%;
   width: 100px;

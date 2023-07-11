@@ -42,7 +42,7 @@ export const SliderItem: FC<TSliderItemProps> = ({
   );
 
   return (
-    <ItemWrapper ref={ref} id={`thumbnail-item-${index}`}>
+    <ItemWrapper ref={ref}>
       <ItemBody height={height}>
         <Thumbnail
           style={{
@@ -69,6 +69,7 @@ const ItemWrapper = styled.div`
 const ItemBody = styled.div<{ height: string | number }>`
   position: relative;
   height: ${({ height }) => (isNaN(height as number) ? height : height + "px")};
+  right: 40px;
 `;
 
 const Thumbnail = styled(motion.div)`

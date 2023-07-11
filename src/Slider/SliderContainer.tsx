@@ -30,40 +30,52 @@ export const SliderContainer: FC<TSliderContainerProps> = ({
 
   return (
     <SliderWrapper>
-      <SliderIndicator
-        currentIndex={currentIndex}
-        length={data.length}
-        container={ref}
-      />
-      <SliderContent>{data[currentIndex]?.content || ""}</SliderContent>
-      <SliderThumbnails ref={ref} height={height}>
-        {isMounted &&
-          data.map(({ id, imgSrc }, index) => (
-            <SliderItem
-              key={id}
-              index={index}
-              imgSrc={imgSrc}
-              height={height}
-              isActive={currentIndex === index}
-              container={ref}
-            />
-          ))}
-      </SliderThumbnails>
+      <SliderBody height={height}>
+        <SliderIndicator
+          currentIndex={currentIndex}
+          length={data.length}
+          container={ref}
+        />
+        <SliderContent>{data[currentIndex]?.content || ""}</SliderContent>
+        <SliderThumbnails ref={ref}>
+          {isMounted &&
+            data.map(({ id, imgSrc }, index) => (
+              <SliderItem
+                key={id}
+                index={index}
+                imgSrc={imgSrc}
+                height={height}
+                isActive={currentIndex === index}
+                container={ref}
+              />
+            ))}
+        </SliderThumbnails>
+      </SliderBody>
     </SliderWrapper>
   );
 };
 
 const SliderWrapper = styled.div`
-  position: relative;
+  background-color: black;
+  padding: 0 100px;
 `;
 
-const SliderThumbnails = styled.div<{ height: string | number }>`
-  background-color: black;
+const SliderBody = styled.div<{ height: string | number }>`
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  gap: 40px;
   height: ${({ height }) => (isNaN(height as number) ? height : height + "px")};
+`;
+const SliderThumbnails = styled.div`
+  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  position: relative;
-  padding: 0 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
   &::-webkit-scrollbar {
     display: none;
   }

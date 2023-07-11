@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { SliderContainer, TSliderItem } from "./Slider";
+import { SliderContainer, TSliderItem } from "./slider";
 
 const data: TSliderItem[] = [
   {
@@ -60,7 +60,7 @@ const App = () => {
       {[...Array(20)].map(() => (
         <br />
       ))}
-      <SliderContainer data={data} height={500} />
+      <SliderContainer data={data} height={"100vh"} />
       {[...Array(20)].map(() => (
         <br />
       ))}

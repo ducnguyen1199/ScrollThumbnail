@@ -14,30 +14,41 @@ export const SliderIndicator: FC<TSliderIndicatorProps> = ({
 }) => {
   const handleOnClick = (index: number) => {
     if (!container?.current) return;
-    const element = container.current.querySelector(`#thumbnail-item-${index}`);
-    if (!element) return;
-    element.scrollIntoView({
+
+    container.current.scrollTo({
       behavior: "smooth",
+      top: index * container.current.clientHeight,
     });
   };
 
   return (
     <SliderIndicatorWrapper>
-      {[...Array(length)].map((_, index) => (
-        <Dot
-          key={index}
-          active={currentIndex === index}
-          onClick={() => handleOnClick(index)}
-        />
-      ))}
+      <SliderIndicatorBody>
+        {[...Array(length)].map((_, index) => (
+          <Dot
+            key={index}
+            active={currentIndex === index}
+            onClick={() => handleOnClick(index)}
+          />
+        ))}
+      </SliderIndicatorBody>
     </SliderIndicatorWrapper>
   );
 };
 
 const SliderIndicatorWrapper = styled.div`
+  position: relative;
+  width: 10px;
+  z-index: 3;
+`;
+
+const SliderIndicatorBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const Dot = styled.div<{ active: boolean }>`
