@@ -1,20 +1,28 @@
 import { motion, useScroll, useTransform, useWillChange } from "framer-motion";
-import { FC, useMemo, useRef } from "react";
+import { FC, Key, ReactNode, RefObject, useMemo, useRef } from "react";
 import styled from "styled-components";
-import { Frame } from "./";
 
-type TSliceItemProps = {
-  isActive: boolean;
+export type TSliderItem = {
+  id: Key;
+  imgSrc: string;
+  content: ReactNode;
 };
 
-export const SLICE_ITEM_HEIGHT = window.innerHeight;
+type TSliderItemProps = {
+  index: number;
+  imgSrc: string;
+  height: string | number;
+  isActive: boolean;
+  container: RefObject<HTMLDivElement>;
+};
 
-export const SliceItem: FC<TSliceItemProps> = ({ isActive }) => {
-  const container = useRef<HTMLDivElement>(
-    typeof document !== "undefined"
-      ? document.querySelector("#container")
-      : null
-  );
+export const SliderItem: FC<TSliderItemProps> = ({
+  index,
+  imgSrc,
+  isActive,
+  container,
+  height,
+}) => {
   const willChange = useWillChange();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -25,7 +33,7 @@ export const SliceItem: FC<TSliceItemProps> = ({ isActive }) => {
 
   const randomNumber = useMemo(() => Math.random(), []);
 
-  const scale = useTransform(scrollYProgress, [0, 1], [2, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.2, 1]);
 
   const rotate = useTransform(
     scrollYProgress,
@@ -33,12 +41,9 @@ export const SliceItem: FC<TSliceItemProps> = ({ isActive }) => {
     [-20, randomNumber * 20]
   );
 
-  const randomColor = "#" + Math.floor(randomNumber * 16777215).toString(16);
-
   return (
-    <Item ref={ref}>
-      <ItemContent>
-        <Frame color={randomColor}>SliceItem</Frame>
+    <ItemWrapper ref={ref} id={`thumbnail-item-${index}`}>
+      <ItemBody height={height}>
         <Thumbnail
           style={{
             willChange,
@@ -49,25 +54,21 @@ export const SliceItem: FC<TSliceItemProps> = ({ isActive }) => {
           }}
         >
           <ThumbnailOverlay style={{ display: isActive ? "none" : "block" }} />
-          <img
-            src={`https://source.unsplash.com/random/200x200?sig=${Math.floor(
-              randomNumber * 10
-            )}`}
-            alt="img"
-          />
+          <img src={imgSrc} alt="img" />
         </Thumbnail>
-      </ItemContent>
-    </Item>
+      </ItemBody>
+    </ItemWrapper>
   );
 };
 
-const Item = styled.div`
+const ItemWrapper = styled.div`
   position: sticky;
   top: 0;
 `;
 
-const ItemContent = styled.div`
+const ItemBody = styled.div<{ height: string | number }>`
   position: relative;
+  height: ${({ height }) => (isNaN(height as number) ? height : height + "px")};
 `;
 
 const Thumbnail = styled(motion.div)`
